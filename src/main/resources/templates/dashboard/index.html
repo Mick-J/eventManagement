@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <head th:replace="~{fragments/head :: head}"></head>
+<body>
+    <div  th:replace="~{fragments/topmenu :: topMenu}"></div>
+    <div class="wrapper mt-5 mb-5">
+        <div th:replace="~{fragments/leftmenu :: sidebar}"></div>
+        <div class="content" id="mainContent">
+            <div th:replace="~{fragments/breadcrumb :: breadcrumb}"></div>
+            <div th:replace="~{fragments/toast :: toast}"></div>
+
+            <div class="row mt-5">
+                <div class="col-md-6">
+                    <div class="chart-container"><canvas id="eventByTypeChart"></canvas></div>
+                </div>
+                <div class="col-md-6">
+                    <div class="chart-container"><canvas id="eventByCompanyChart"></canvas></div>
+                </div>
+            </div>
+
+            <div class="row mt-5">
+                <div class="col-md-6">
+                    <div class="chart-container"><canvas id="leadByStatusChart"></canvas></div>
+                </div>
+                <div class="col-md-6">
+                    <div class="chart-container"><canvas id="leadByInterestChart"></canvas></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Footer -->
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        async function fetchChartData(url) {
+            const response = await fetch(url);
+            return response.json();
+        }
+
+        async function createCharts() {
+            const eventByTypeData = await fetchChartData('/api/dashboard/event-by-type');
+            const eventByCompanyData = await fetchChartData('/api/dashboard/event-by-company');
+            const leadByInterestData = await fetchChartData('/api/dashboard/lead-by-interest');
+            const leadByStatusData = await fetchChartData('/api/dashboard/lead-by-status');
+
+            new Chart(document.getElementById('eventByTypeChart'), {
+                type: 'pie',
+                data: {
+                    labels: Object.keys(eventByTypeData),
+                    datasets: [{
+                        data: Object.values(eventByTypeData),
+                        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
+                    }]
+                },
+                options: {
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Events by event type',
+                            font: { size: 25 }
+                        },
+                        legend:{
+                            position: 'bottom',
+                            align: 'center'
+                        }
+                    }
+                },
+                response: true,
+                maintainAspectRatio: false
+            });
+
+            new Chart(document.getElementById('eventByCompanyChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(eventByCompanyData),
+                    datasets: [{
+                        data: Object.values(eventByCompanyData),
+                        backgroundColor: ['#4CAF50', '#FFC107', '#2196F3']
+                    }]
+                },
+                options: {
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Events by Company',
+                            font: { size: 25 }
+                        },
+                        legend:{
+                            position: 'bottom',
+                            align: 'start'
+                        }
+                    }
+                },
+                response: true,
+                maintainAspectRatio: false
+            });
+
+            new Chart(document.getElementById('leadByInterestChart'), {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(leadByInterestData),
+                    datasets: [{
+                        label: 'Interest Level',
+                        data: Object.values(leadByInterestData),
+                        backgroundColor: '#FF5733'
+                    }]
+                },
+                options: {
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Lead by Interest Level',
+                            font: { size: 25 }
+                        },
+                        legend:{
+                            position: 'bottom',
+                            align: 'center'
+                        }
+                    }
+                },
+                response: true,
+                maintainAspectRatio: false
+            });
+
+            new Chart(document.getElementById('leadByStatusChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(leadByStatusData),
+                    datasets: [{
+                        data: Object.values(leadByStatusData),
+                        backgroundColor: ['#8E44AD', '#2ECC71', '#E74C3C']
+                    }]
+                },
+                options: {
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Lead by status',
+                            font: { size: 25 }
+                        },
+                        legend:{
+                            position: 'bottom',
+                            align: 'center'
+                        }
+                    }
+                },
+                response: true,
+                maintainAspectRatio: false
+
+            });
+        }
+        createCharts();
+    </script>
+</body>
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{fragments/head :: head}"> </head>
+<body>
+    <div th:replace="~{fragments/topmenu :: topMenu}"></div>
+    <div class="wrapper mt-5 mb-5">
+        <div th:replace="~{fragments/leftmenu :: sidebar}"></div>
+        <div class="content" id="mainContent">
+            <!--    breadcrumb -->
+             <div th:replace="~{fragments/breadcrumb :: breadcrumb}"></div>
+            <!--  content -->
+            <div th:replace="~{fragments/toast :: toast}"></div>
+            <!-- Form -->
+            <form id="eventForm" method="post" th:object="${leadEventDTO}" enctype="multipart/form-data"  class="row mt-5 needs-validation" novalidate>
+                <!-- Left Card -->
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header bg-secondary text-white"><strong>Lead Details</strong></div>
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <label class="col-sm-4 col-form-label"></label>
+                                <div class="col-sm-8">
+                                    <input type="hidden" name="id" th:value="${id}">
+                                </div>
+                            </div>
+                            <!-- First Name -->
+                            <div class="row mb-3">
+                               <label class="col-sm-4 col-form-label">First Name<span class="text-danger"><sup>*</sup></span></label>
+                               <div class="col-sm-8">
+                                   <input type="hidden" th:value="${id}" class="form-control is-invalid" >
+                                   <input id="leadFirstName" type="text" th:field="${leadEventDTO.leadFirstName}" class="form-control" placeholder="First Name" required>
+                                   <div class="valid-feedback">nn </div>
+                               </div>
+                            </div>
+                            <!-- Last Name -->
+                            <div class="row mb-3">
+                               <label class="col-sm-4 col-form-label">Last Name<span class="text-danger"><sup>*</sup></span></label>
+                               <div class="col-sm-8">
+                                   <input id="leadLastName" type="text" th:field="${leadEventDTO.leadLastName}" class="form-control mt-2" placeholder="Last Name" required>
+                                   <div class="valid-feedback"></div>
+                               </div>
+                           </div>
+
+                            <!-- Email -->
+                            <div class="row mb-3">
+                               <label class="col-sm-4 col-form-label">Email<span class="text-danger"><sup>*</sup></span></label>
+                                <div class="col-sm-8">
+                                    <input id="leadEmail" type="email" th:field="${leadEventDTO.leadEmail}" class="form-control" required>
+                                </div>
+                            </div>
+
+                            <!-- Phone -->
+                            <div class="row mb-3">
+                               <label class="col-sm-4 col-form-label">Phone</label>
+                               <div class="col-sm-8">
+                                   <input type="text" th:field="${leadEventDTO.leadPhone}" class="form-control">
+                               </div>
+                            </div>
+
+                            <!-- Lead State -->
+                            <div class="row mb-3">
+                               <label class="col-sm-4 col-form-label">Lead State</label>
+                                <div class="col-sm-8">
+                                    <select th:field="${leadEventDTO.leadState}" class="form-select" >
+                                        <option th:each="state : ${T(com.event_management.eventmanagement.utils.LeadState).values()}"
+                                            th:value="${state}"
+                                            th:text="${state.print()}"
+                                            th:selected="${state == leadEventDTO.leadState}">
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Card -->
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header bg-secondary text-white"><strong>Business Info</strong></div>
+                        <div class="card-body">
+                            <!-- Company Name -->
+                            <div class="row mb-3">
+                               <label class="col-sm-4 col-form-label">Company Name</label>
+                                <div class="col-sm-8">
+                                    <input type="text" th:field="${leadEventDTO.leadCompanyName}" class="form-control">
+                                </div>
+                            </div>
+
+                            <!-- Interest Level -->
+                            <div class="row mb-3">
+                               <label class="col-sm-4 col-form-label">Interest Level</label>
+                                <div class="col-sm-8">
+                                    <select th:field="${leadEventDTO.leadInterestLevel}" class="form-select">
+                                        <option th:each="interestLevel : ${T(com.event_management.eventmanagement.utils.LeadInterestLevel).values()}"
+                                                th:value="${interestLevel}"
+                                                th:text="${interestLevel.print()}"
+                                                th:selected="${interestLevel == leadEventDTO.leadInterestLevel}">
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Comment -->
+                            <div class="row mb-3">
+                               <label class="col-sm-4 col-form-label">Comment</label>
+                                <div class="col-sm-8">
+                                    <textarea th:field="${leadEventDTO.comment}" class="form-control" rows="3"></textarea>
+                                </div>
+                            </div>
+
+                            <!-- Business Card Upload -->
+                            <div class="row mb-3">
+                               <label class="col-sm-4 col-form-label">Business Card</label>
+                                <div class="col-sm-8">
+                                    <input type="file" name="leadBCardImgFile" class="form-control">
+                                    <small class="text-muted">Current: <span th:text="${leadEventDTO.leadBCardImg}"></span></small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Submit Button -->
+                <div class="text-end mt-4">
+                    <a class="btn btn-danger" th:href="@{/leadEvent/display(id=${id})}">Cancel</a>
+                    <button id="btnSubmitEvtform" class="btn btn-success me-md-2" type="submit"><span id="spanSave">Save</span></button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>

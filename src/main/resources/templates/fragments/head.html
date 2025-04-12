@@ -1,0 +1,30 @@
+<head th:fragment="head">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Event Management</title>
+    <link th:href="@{/css/bootstrap5.3.3.min.css}" rel="stylesheet" >
+    <link th:href="@{/css/bootstrap_icons1.11.3.min.css}" rel="stylesheet" >
+    <link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}">
+    <link th:if="${hasTempusDominus}" rel="stylesheet" th:href="@{/css/tempus-dominus6.9.4.min.css}" />
+    <link th:if="${hasFontAwesome}" rel="stylesheet" th:href="@{/css/fontawesome-v6/font_awesome_all6.7.2.min.css}" />
+    <link th:if="${hasFancyImg}" rel="stylesheet" th:href="@{/css/fancybox.min3.5.7.css}" />
+    <script th:if="${hasPopper}" th:src="@{/js/popper.core2.11.6.min.js}"></script>
+    <script th:src="@{/js/bootstrap5.3.3.bundle.min.js}" ></script>
+    <script th:if="${hasTempusDominus}" th:src="@{/js/tempus-dominus6.9.4.min.js}"></script>
+    <link th:href="@{/css/style.css}" rel="stylesheet" >
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            let pathParts = window.location.pathname.split('/').filter(part => part); // Remove empty parts
+            let title = "Event Management"; // Default title
+
+            if (pathParts.length === 1) {
+                title = pathParts[0] + " | Event";
+            } else if (pathParts.length >= 2) {
+                title = pathParts[1].charAt(0).toUpperCase() + pathParts[1].slice(1)
+                    + " | " + pathParts[0].charAt(0).toUpperCase() + pathParts[0].slice(1); // "Edit | Country"
+            }
+
+            document.title = title;
+        });
+    </script>
+</head>

@@ -1,0 +1,17 @@
+services:
+  mariadb:
+    image: mariadb:10.11
+    container_name: event-management
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootPassword
+      MYSQL_USER: user
+      MYSQL_PASSWORD: userPassword
+      MYSQL_DATABASE: event_db
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./db:/docker-entrypoint-initdb.d
+      - event_db_data:/var/lib/mysql
+volumes:
+  event_db_data:

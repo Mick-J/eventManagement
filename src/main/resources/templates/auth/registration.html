@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+    <link th:href="@{/css/bootstrap5.3.3.min.css}" rel="stylesheet" >
+</head>
+<body class="bg-light">
+    <div class="top-menu navbar-dark bg-dark px-3" style="min-height: 30px;">
+        <div class="d-flex align-items-center">
+            <span class="navbar-brand mb-0">Event Management</span>
+        </div>
+    </div>
+    <div class="wrapper mt-5 mb-5">
+        <!-- Display login errors -->
+
+        <div class="container mt-5">
+
+            <!-- form-->
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <!-- error message-->
+                    <div th:if="${error}" class="alert alert-danger mb-2">
+                        Error email already exist or not set properly !
+                    </div>
+                    <!-- form card-->
+                    <div class="card shadow-lg">
+                        <div class="card-header bg-dark text-white text-center">
+                            <h4>Registration</h4>
+                        </div>
+                        <div class="card-body">
+                            <form id="registrationForm" th:action="@{/auth/registration}" th:object="${userDTO}" method="post" class="needs-validation" novalidate>
+
+                                <!-- First Name -->
+                                <div class="mb-2">
+                                    <label class="form-label">First Name</label>
+                                    <input type="text" class="form-control" th:field="${userDTO.userFirstname}">
+                                </div>
+
+                                <!-- Last Name -->
+                                <div class="mb-2">
+                                    <label class="form-label">Last Name</label>
+                                    <input type="text" class="form-control" th:field="${userDTO.userLastname}">
+                                </div>
+
+                                <!-- Email -->
+                                <div class="mb-2">
+                                    <label class="form-label">Email<span class="text-danger"><sup>*</sup></span></label>
+                                    <input type="email" class="form-control" th:field="${userDTO.userEmail}" required>
+                                </div>
+
+                                <!-- Password -->
+                                <div class="mb-2">
+                                    <label class="form-label">Password<span class="text-danger"><sup>*</sup></span></label>
+                                    <input type="password" id="userPassword" class="form-control" th:field="${userDTO.userPassword}" required>
+                                </div>
+                                <!-- Password -->
+                                <div class="mb-2">
+                                    <label class="form-label">Confirm Password<span class="text-danger"><sup>*</sup></span></label>
+                                    <input type="password" id="checkPassword" name="checkPassword" class="form-control" required>
+                                    <small id="passwordError"></small> <!-- Error message container -->
+                                </div>
+                                <!-- Phone -->
+                                <div class="mb-2">
+                                    <label class="form-label">Phone</label>
+                                    <input type="text" class="form-control" th:field="${userDTO.userPhone}">
+                                </div>
+
+                                <!-- Submit Button -->
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-success">Register</button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="card-footer text-center">
+                            <small>Already have an account? <a th:href="@{/auth/login}">Login here</a></small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Footer -->
+    <footer class="footer bg-dark text-light fixed-bottom" th:fragment="footer">
+        <div class="container">
+            <div class="text-center mt-3">
+                <p class="mb-0">2025 Event Management, Feel free to use it!🎉</p>
+            </div>
+        </div>
+    </footer>
+
+    <script th:src="@{/js/bootstrap5.3.3.bundle.min.js}" ></script>
+    <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", function() {
+            const form = document.getElementById("registrationForm");
+            const password = document.getElementById("userPassword");
+            const confirmPassword = document.getElementById("checkPassword");
+            const errorMessage = document.getElementById("passwordError");
+
+            form.addEventListener("submit", function(event) {
+                if (!password.value || !confirmPassword.value || password.value !== confirmPassword.value) {
+                    event.preventDefault();
+                    errorMessage.textContent = "Passwords do not match!";
+                    errorMessage.style.color = "red";
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{fragments/head :: head}"> </head>
+<body>
+    <div  th:replace="~{fragments/topmenu :: topMenu}"></div>
+    <div class="wrapper mt-5 mb-5">
+        <div th:replace="~{fragments/leftmenu :: sidebar}"></div>
+        <div class="content" id="mainContent">
+            <!--    breadcrumb -->
+            <div th:replace="~{fragments/breadcrumb :: breadcrumb}"></div>
+            <!--  content -->
+            <div th:replace="~{fragments/toast :: toast}"></div>
+            <div class="table-responsive mt-5">
+                <table class="table table-light table-striped table-hover caption-top">
+                    <caption>Each row is clickable and show the current row in display mode </caption>
+                    <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Event Type</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody class="table-group-divider">
+                    <tr th:each="eventType : ${eventTypeList}" th:data-id="${eventType.id}" class="clickable-row">
+                        <td th:text="${eventType.id}"></td>
+                        <td th:text="${eventType.eventType}"></td>
+                        <td style="white-space:nowrap">
+                            <a class="btn btn-outline-warning btn-sm"
+                               th:href="@{/eventType/edit(id=${eventType.id})}">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!--    footer-->
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>

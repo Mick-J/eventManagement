@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <head th:replace="~{fragments/head :: head}"> </head>
+    <body>
+        <!--    Top menu-->
+        <div  th:replace="~{fragments/topmenu :: topMenu}"></div>
+        <!--    sidebar + main content -->
+        <div class="wrapper mt-5 mb-5">
+            <!--    sidebar -->
+            <div th:replace="~{fragments/leftmenu :: sidebar}"></div>
+            <!--    Page main content -->
+            <div class="content" id="mainContent">
+                <!--    breadcrumb -->
+                <div th:replace="~{fragments/breadcrumb :: breadcrumb}"></div>
+                <!--  content -->
+                <br><br>
+                <h3>Welcome to <span class="text-primary">Company Event Management</span></h3>
+                <div class="callout callout-info">
+                    I originally wrote this event management in PHP couple years ago when working on a project.<br/>
+                    Here is a very simplified version of it I decided to re-write using Spring boot.<br/><br/>
+                    <strong> A multinational company (let call it Tech) have many Subsidiaries around the word.</strong><br><br>
+
+                    <ul>
+                        <li><strong>Company</strong> designates here one Subsidiary</li>
+                        <li><strong>Country</strong> designates a country where one Subsidiary is located</li>
+                        <li><strong>User</strong> designates an employee</li>
+                        <li><strong>Attendee</strong> is an employee of any Subsidiary who attend an event</li>
+                        <li><strong>Lead</strong> designates a future customer of Tech company</li>
+                        <li><strong>Event type</strong> can be either a conference, an exhibition or a meeting</li>
+                        <li><strong>Event</strong> can take place in any country where the company Tech is present or can be online depending on the event type.</li>
+                    </ul>
+                </div>
+                <!--    global Modal -->
+                <div th:replace="~{fragments/modal :: globalModal}"></div>
+            </div>
+        </div>
+        <!--    footer-->
+        <footer th:replace="~{fragments/footer :: footer}"></footer>
+    </body>
+</html>

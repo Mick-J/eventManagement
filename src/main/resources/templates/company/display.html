@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{fragments/head :: head}"> </head>
+<body>
+    <div  th:replace="~{fragments/topmenu :: topMenu}"></div>
+    <div class="wrapper mt-5 mb-5">
+        <div th:replace="~{fragments/leftmenu :: sidebar}"></div>
+        <div class="content" id="mainContent">
+            <!--    breadcrumb -->
+             <div th:replace="~{fragments/breadcrumb :: breadcrumb}"></div>
+            <!--  content -->
+            <div th:replace="~{fragments/modal :: globalModal}"></div>
+            <div th:replace="~{fragments/toast :: toast}"></div>
+            <div class="card text-bg-light mt-5 mb-3">
+                <div class="card-header"><strong>Company Info</strong></div>
+                <div class="card-body" th:object="${company}">
+                    <div class="row mb-3">
+                        <label class="col-sm-4 col-form-label">Name</label>
+                        <div class="col-sm-8">
+                            <span th:text="${company.companyName}"></span>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="col-sm-4 col-form-label">Email</label>
+                        <div class="col-sm-8">
+                            <span th:text="${company.contactEmail}"></span>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="col-sm-4 col-form-label">Web Site</label>
+                        <div class="col-sm-8">
+                            <span th:text="${company.website}"></span>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="col-sm-4 col-form-label">Phone</label>
+                        <div class="col-sm-8">
+                            <span th:text="${company.companyPhone}"></span>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="col-sm-4 col-form-label">Fax</label>
+                        <div class="col-sm-8">
+                            <span th:text="${company.companyFax}"></span>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="col-sm-4 col-form-label">Country</label>
+                        <div class="col-sm-8">
+                            <span th:text="${company.getCountry().countryName}"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<div th:fragment="sidebar" class="sidebar bg-dark text-light p-3" id="sidebar">
+    <button class="collapse-btn" id="collapseBtn"><i class="bi bi-list"></i></button>
+    <!-- Navigation Menu -->
+    <nav class="nav flex-column flex-grow-1">
+        <a href="/" class="nav-link text-white text-start active">
+            <i class="bi bi-house"></i> <span class="menu-text">Home</span>
+        </a>
+        <a href="/dashboard" class="nav-link text-white text-start">
+            <i class="bi bi-speedometer2"></i> <span class="menu-text">Dashboard</span>
+        </a>
+
+        <a href="#" class="nav-link text-white d-flex justify-content-between align-items-center" data-bs-toggle="collapse" data-bs-target="#companySubmenu">
+            <span><i class="bi bi-building-fill"></i> <span class="menu-text">Company</span></span>
+            <i class="bi bi-chevron-right dropdown-icon"></i>
+        </a>
+        <div class="collapse leftSubmenu" id="companySubmenu">
+            <a href="/country" class="nav-link text-white ms-3">Country</a>
+            <a href="/company" class="nav-link text-white ms-3">Company</a>
+        </div>
+
+        <a href="#" class="nav-link text-white d-flex justify-content-between align-items-center" data-bs-toggle="collapse" data-bs-target="#eventSubmenu">
+            <span><i class="bi bi-calendar-event"></i> <span class="menu-text">Event</span></span>
+            <i class="bi bi-chevron-right dropdown-icon"></i>
+        </a>
+        <div class="collapse leftSubmenu" id="eventSubmenu">
+            <a href="/eventType" class="nav-link text-white ms-3">Event Type</a>
+            <a href="/leadEvent" class="nav-link text-white ms-3">Lead</a>
+            <a href="/events" class="nav-link text-white ms-3">Events</a>
+        </div>
+
+        <a sec:authorize="hasRole('ADMIN')" href="/admin" class="nav-link text-white text-start">
+            <i class="bi bi-person-vcard"></i> <span class="menu-text">User</span>
+        </a>
+        <a sec:authorize="hasRole('USER')" href="/user/display" class="nav-link text-white text-start">
+            <i class="bi bi-person-vcard"></i> <span class="menu-text">User</span>
+        </a>
+    </nav>
+</div>

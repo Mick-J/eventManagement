@@ -1,0 +1,10 @@
+<nav th:fragment="breadcrumb" aria-label="breadcrumb" mb-5 mt-2>
+    <ol class="breadcrumb">
+        <li th:each="crumb, iterStat : ${breadcrumbLinks}"
+            class="breadcrumb-item"
+            th:classappend="${iterStat.last} ? 'active'">
+            <a th:if="!${iterStat.last}" th:href="${crumb.url}" th:text="${crumb.name}"></a>
+            <span th:if="${iterStat.last}" th:text="${crumb.name}"></span>
+        </li>
+    </ol>
+</nav>

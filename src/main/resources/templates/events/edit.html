@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{fragments/head :: head}"> </head>
+<body>
+    <div  th:replace="~{fragments/topmenu :: topMenu}"></div>
+    <div class="wrapper mt-5 mb-5">
+        <div th:replace="~{fragments/leftmenu :: sidebar}"></div>
+        <div class="content" id="mainContent">
+            <!--    breadcrumb -->
+             <div th:replace="~{fragments/breadcrumb :: breadcrumb}"></div>
+            <!--  content -->
+            <div th:replace="~{fragments/toast :: toast}"></div>
+
+            <!-- form-->
+            <form id="eventForm" method="post" th:object="${eventDTO}" class="needs-validation" novalidate>
+                <div class="row mb-2">
+                    <!-- Left Card -->
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header bg-secondary text-white"><strong>Event info</strong></div>
+                            <div class="card-body">
+                                <div class="row mb-3">
+                                    <label class="col-sm-4 col-form-label"></label>
+                                    <div class="col-sm-8">
+                                        <input type="hidden" name="id" th:value="${eventDTO.id}">
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label class="col-sm-4 col-form-label">Name<span class="text-danger"><sup>*</sup></span></label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" name="eventTitle" th:field="${eventDTO.eventTitle}" required>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <label class="col-sm-4 col-form-label">Type<span class="text-danger"><sup>*</sup></span></label>
+                                    <div class="col-sm-8">
+                                        <select class="form-control" th:field="${eventDTO.eventTypeId}" required>
+                                            <option th:each="type : ${eventTypeList}"
+                                                    th:value="${type.id}"
+                                                    th:text="${type.eventType}"></option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label class="col-sm-4 col-form-label">Location</label>
+                                    <div class="col-sm-8">
+                                        <input class="form-control" name="eventTitle" th:field="${eventDTO.eventLocation}">
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label class="col-sm-4 col-form-label">Responsible<span class="text-danger"><sup>*</sup></span></label>
+                                    <div class="col-sm-8">
+                                        <select class="form-control" th:field="${eventDTO.eventResponsible}" required>
+                                            <option th:each="user : ${userList}"
+                                                    th:value="${user.id}"
+                                                    th:text="${user.userFirstname + ' ' + user.userLastname}"></option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label for="eventDateBegin" class="col-sm-4 col-form-label">Date Begin</label>
+                                    <div class="col-sm-8 d-flex gap-2">
+                                        <div class="input-group" id="datePickerBegin" data-td-target-input="nearest" data-td-target-toggle="nearest">
+                                            <input class="form-control" type="text" name="eventDateBegin" id="eventDateBegin" data-td-target="#datePickerBegin" th:field="${eventDTO.eventDateBegin}">
+                                            <span class="input-group-text" data-td-target="#datePickerBegin" data-td-toggle="datetimepicker">
+                                                <i class="fa fa-calendar"></i>
+                                            </span>
+                                        </div>
+
+                                        <div class="input-group" id="timePickerBegin" data-td-target-input="nearest" data-td-target-toggle="nearest">
+                                            <input type="text" class="form-control" name="eventTimeBegin" id="eventTimeBegin" data-td-target="#timePickerBegin" th:field="${eventDTO.eventTimeBegin}">
+                                            <span class="input-group-text" data-td-target="#timePickerBegin" data-td-toggle="datetimepicker">
+                                                <i class="fa fa-clock"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label for="eventDateEnd" class="col-sm-4 col-form-label">Date End</label>
+                                    <div class="col-sm-8 d-flex gap-2">
+                                        <div class="input-group" id="datePickerEnd" data-td-target-input="nearest" data-td-target-toggle="nearest">
+                                            <input type="text" id="eventDateEnd" name="eventDateEnd" class="form-control" data-td-target="#datePickerEnd" th:field="${eventDTO.eventDateEnd}">
+                                            <span class="input-group-text" data-td-target="#datePickerEnd" data-td-toggle="datetimepicker">
+                                                <i class="fa fa-calendar"></i>
+                                            </span>
+                                        </div>
+
+                                        <div class="input-group" id="timePickerEnd" data-td-target-input="nearest" data-td-target-toggle="nearest">
+                                            <input type="text" name="eventTimeEnd" class="form-control" id="eventTimeEnd" data-td-target="#timePickerEnd" th:field="${eventDTO.eventTimeEnd}">
+                                            <span class="input-group-text" data-td-target="#timePickerEnd" data-td-toggle="datetimepicker">
+                                                <i class="fa fa-clock"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label class="col-sm-4 col-form-label">Company<span class="text-danger"><sup>*</sup></span></label>
+                                    <div class="col-sm-8">
+                                        <select class="form-control" th:field="${eventDTO.companyId}" required>
+                                            <option th:each="company : ${companyList}"
+                                                    th:value="${company.id}"
+                                                    th:text="${company.getCompanyName()}"></option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="row mb-3">
+                                    <label class="col-sm-4 col-form-label">Description</label>
+                                    <div class="col-sm-8">
+                                        <textarea class="form-control" name="eventDescription" th:field="${eventDTO.eventDescription}" rows="2"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Card -->
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header bg-secondary text-white"><strong>Company Attendee</strong></div>
+                            <div class="card-body">
+                                <!-- Company attendee -->
+                                <div id="attendeeContainer">
+                                    <div class="row mb-2 attendeeRow" th:each="i : ${#numbers.sequence(0, 19)}" th:style="${i > 0} ? 'display: none;'">
+                                        <div class="col-md-3">
+                                            <label>Attendee</label>
+                                        </div>
+                                        <div class="col-md-6 ">
+                                            <select th:attr="name='companyAttendeeIds[' + ${i} + ']'" class="form-control">
+                                                <option value="-1">-- Select attendee --</option>
+                                                <option th:each="attendee : ${userList}"
+                                                        th:value="${attendee.id}"
+                                                        th:text="${attendee.userFirstname} + ' ' + ${attendee.userLastname}"
+                                                        th:selected="${attendee.id == eventDTO.companyAttendeeIds[i]}">
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <button type="button" class="btn btn-success plusBtn" onclick="addRow()">
+                                                <i class="fa fa-plus" aria-hidden="true"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-danger minusBtn" onclick="removeRow(this)">
+                                                <i class="fa fa-minus" aria-hidden="true"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            <!-- leadEvent -->
+                <div class="row">
+                    <!-- Left Card -->
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header bg-secondary text-white"><strong>Lead info</strong></div>
+                            <div class="card-body">
+                                <div id="leadContainer">
+                                    <div class="row mb-2 leadRow" th:each="i : ${#numbers.sequence(0, 19)}" th:style="${i > 0} ? 'display: none;'">
+                                        <div class="col-md-3">
+                                            <label>Lead</label>
+                                        </div>
+                                        <div class="col-md-6 ">
+                                            <select th:attr="name='leadIds[' + ${i} + ']'" class="form-control">
+                                                <option value="-1">-- Select lead --</option>
+                                                <option th:each="lead : ${leadEventList}"
+                                                        th:value="${lead.id}"
+                                                        th:text="${lead.leadFirstname} + ' ' + ${lead.leadLastname}"
+                                                        th:selected="${lead.id == eventDTO.leadIds[i]}">
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <button type="button" class="btn btn-success plusBtn" onclick="addRow()">
+                                                <i class="fa fa-plus" aria-hidden="true"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-danger minusBtn" onclick="removeRow(this)">
+                                                <i class="fa fa-minus" aria-hidden="true"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="text-end mt-4">
+                    <a class="btn btn-danger" th:href="@{/events/display(id=${eventDTO.id})}">Cancel</a>
+                    <button id="btnSubmitEvtform" class="btn btn-success me-md-2" type="submit"><span id="spanSave">Save</span></button>
+                </div>
+            </form>
+            <!-- End Form -->
+        </div>
+    </div>
+    <!-- Footer -->
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+    <!-- Date and Time display tempusDominus -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('#datePickerBegin, #datePickerEnd').forEach(element => {
+                new tempusDominus.TempusDominus(element, {
+                    localization: {
+                        format: "yyyy-MM-dd"
+                    },
+                    display: {
+                        viewMode: 'calendar',
+                        components: {
+                            calendar: true,
+                            date: true,
+                            month: true,
+                            year: true,
+                            decades: true,
+                            clock: false,
+                            hours: false,
+                            minutes: false,
+                            seconds: false,
+                        }
+                    }
+                });
+                // Manually clear any date from input after initialization
+                element.value = '';
+
+            });
+
+            // Time Picker
+            document.querySelectorAll('#timePickerBegin, #timePickerEnd').forEach(element => {
+                new tempusDominus.TempusDominus(element, {
+                    localization: {
+                        format: 'HH:mm',
+                        hourCycle: 'h12'
+                    },
+                    display: {
+                        viewMode: 'clock',
+                        components: {
+                            calendar: false,
+                            clock: true,
+                            hours: true,
+                            minutes: true,
+                            seconds: false,
+                        }
+                    }
+                });
+
+                // Manually clear any date from input after initialization
+                element.value = ''; // Clears any unwanted pre-filled values
+            });
+        });
+    </script>
+
+    <!--data -->
+    <!--<script id="attendeeData" type="application/json" th:text="${eventDTO.getLeadIds()}"></script>-->
+
+    <!-- manage row hidde/display and +/- buttons -->
+    <script>
+        function DynamicListManager(containerSelector, rowClass, selectName, defaultValue = "-1") {
+            const container = document.querySelector(containerSelector);
+            const rows = container.querySelectorAll(`.${rowClass}`);
+            const plusButtons = container.querySelectorAll(".plusBtn");
+            const minusButtons = container.querySelectorAll(".minusBtn");
+
+            function updateButtons() {
+                let visibleRows = Array.from(rows).filter(row => row.style.display !== "none");
+
+                // Hide all plus buttons first
+                plusButtons.forEach(btn => btn.style.display = "none");
+                minusButtons.forEach(btn => btn.style.display = "inline-block");
+
+                // If only one row is visible, hide its minus button
+                if (visibleRows.length === 1) {
+                    visibleRows[0].querySelector(".minusBtn").style.display = "none";
+                }
+
+                // Ensure only last row has a plus button
+                if (visibleRows.length > 0) {
+                    visibleRows[visibleRows.length - 1].querySelector(".plusBtn").style.display = "inline-block";
+                }
+            }
+
+            function addRow() {
+                let hiddenRow = Array.from(rows).find(row => row.style.display === "none");
+                if (hiddenRow) {
+                    hiddenRow.style.display = "flex";
+                }
+                updateButtons();
+            }
+
+            function removeRow(button) {
+                let row = button.closest(`.${rowClass}`);
+                let select = row.querySelector(`select[name^='${selectName}']`);
+
+                select.value = defaultValue; // Reset to default
+                row.style.display = "none"; // Hide row
+                updateButtons();
+            }
+
+            function initializeRows() {
+                let hasVisibleRow = false;
+
+                rows.forEach(row => {
+                    let select = row.querySelector(`select[name^='${selectName}']`);
+                    if (select.value !== defaultValue) {
+                        row.style.display = "flex"; // Show row if it has a valid value
+                        hasVisibleRow = true;
+                    } else {
+                        row.style.display = "none";
+                    }
+                });
+
+                // Ensure at least one row is visible
+                if (!hasVisibleRow) {
+                    rows[0].style.display = "flex";
+                }
+
+                updateButtons();
+            }
+
+            // Attach event listeners
+            plusButtons.forEach(btn => btn.addEventListener("click", addRow));
+            minusButtons.forEach(btn => btn.addEventListener("click", function () {
+                removeRow(this);
+            }));
+
+            // Initialize on page load
+            initializeRows();
+        }
+
+        //
+        document.addEventListener("DOMContentLoaded", function () {
+            DynamicListManager("#attendeeContainer", "attendeeRow", "companyAttendeeIds");
+            DynamicListManager("#leadContainer", "leadRow", "leadIds");
+        });
+    </script>
+</body>
+</html>

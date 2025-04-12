@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <head th:replace="~{fragments/head :: head}"> </head>
+<body>
+    <div  th:replace="~{fragments/topmenu :: topMenu}"></div>
+    <div class="wrapper mt-5 mb-5">
+        <div th:replace="~{fragments/leftmenu :: sidebar}"></div>
+        <div class="content" id="mainContent">
+            <!--    breadcrumb -->
+            <div th:replace="~{fragments/breadcrumb :: breadcrumb}"></div>
+            <!--  content -->
+            <div class="table-responsive mt-5">
+                <table class="table table-light table-striped table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Company</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Role</th>
+                            <!--  <th></th>-->
+                        </tr>
+                    </thead>
+                    <tbody class="table-group-divider">
+                        <tr th:each="user : ${userList}" >
+                            <td th:text="${user.id}"></td>
+                            <td th:text="${user.userFirstname}"></td>
+                            <td th:text="${user.userLastname}"></td>
+                            <td th:text="${user.userCompanyName}"></td>
+                            <td th:text="${user.userEmail}"></td>
+                            <td th:text="${user.userPhone}"></td>
+                            <td>
+                                <span th:if='${user.userRole.equals("USER")}' class="badge bg-info" th:text="${user.userRole}"></span>
+                                <span th:if='${user.userRole.equals("ADMIN")}' class="badge bg-danger" th:text="${user.userRole}"></span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!--    footer-->
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>

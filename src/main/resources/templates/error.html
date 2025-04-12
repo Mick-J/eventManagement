@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head}"> </head>
+<body>
+    <!--    Top menu-->
+    <div  th:replace="~{fragments/topmenu :: topMenu}"></div>
+    <!--    sidebar + main content -->
+    <div class="wrapper mt-5 mb-5">
+        <!--    sidebar -->
+        <div th:replace="~{fragments/leftmenu :: sidebar}"></div>
+        <!--    Page main content -->
+        <div class="content" id="mainContent">
+            <!--    breadcrumb -->
+            <div th:replace="~{fragments/breadcrumb :: breadcrumb}"></div>
+            <!--  content -->
+            <div class="error-container">
+                <h1>Oops! Something went wrong.</h1>
+                <p>
+                    <span th:text="'Error: ' + ${status}" class="badge bg-danger"></span> |
+                    <span th:text="${error}" class="badge bg-warning"></span> |
+                    <span th:text="${message}" class="badge bg-info"></span>
+                </p>
+                <a href="/" class="btn btn-sm btn-primary">Back Home</a>
+                <img th:src="@{/images/error.png}" alt="404 Not Found" >
+            </div>
+        </div>
+    </div>
+    <!--    footer-->
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>

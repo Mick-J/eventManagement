@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{fragments/head :: head}"> </head>
+<body>
+    <div  th:replace="~{fragments/topmenu :: topMenu}"></div>
+    <div class="wrapper mt-5 mb-5">
+        <div th:replace="~{fragments/leftmenu :: sidebar}"></div>
+        <div class="content" id="mainContent">
+            <!--    breadcrumb -->
+            <div th:replace="~{fragments/breadcrumb :: breadcrumb}"></div>
+            <!--  content -->
+            <div th:replace="~{fragments/toast :: toast}"></div>
+            <div class="table-responsive mt-5">
+                <table class="table table-light table-striped table-hover caption-top">
+                    <caption>Each row is clickable and show the current row in display mode </caption>
+                    <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Code</th>
+                        <th>Dial Code</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody class="table-group-divider">
+                    <tr th:each="country : ${countryList}" th:data-id="${country.getId()}" class="clickable-row">
+                        <td th:text="${country.id}"></td>
+                        <td th:text="${country.countryName}"></td>
+                        <td th:text="${country.countryCode}"></td>
+                        <td th:text="${country.countryDialCode}"></td>
+                        <td style="white-space:nowrap">
+                           <!-- <a class="btn btn-primary btn-sm"
+                               th:href="@{/country/display(id=${country.getId()})}">
+                                <i class="bi bi-search"></i>
+                            </a>-->
+                            <a class="btn btn-outline-warning btn-sm"
+                               th:href="@{/country/edit(id=${country.getId()})}">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+
+        </div>
+    </div>
+    <!--    footer-->
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>

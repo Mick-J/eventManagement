@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+    <html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head}"></head>
+<body>
+    <div  th:replace="~{fragments/topmenu :: topMenu}"></div>
+    <div class="wrapper mt-5 mb-5">
+        <div th:replace="~{fragments/leftmenu :: sidebar}"></div>
+        <div class="content" id="mainContent">
+            <!--    breadcrumb -->
+            <div th:replace="~{fragments/breadcrumb :: breadcrumb}"></div>
+            <!--  content -->
+            <div th:replace="~{fragments/toast :: toast}"></div>
+            <div class="table-responsive mt-5">
+                <table class="table table-light table-striped table-hover caption-top">
+                    <caption>Each row is clickable and show the current row in display mode</caption>
+                    <thead class="table-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Company</th>
+                            <th>Interest Level</th>
+                            <th>Status</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-group-divider">
+                        <tr th:each="lead : ${leadEventList}" th:data-id="${lead.id}" class="clickable-row">
+                            <td th:text="${lead.id}"></td>
+                            <td th:text="${lead.leadFirstname}"></td>
+                            <td th:text="${lead.leadLastname}"></td>
+                            <td th:text="${lead.leadEmail}"></td>
+                            <td th:text="${lead.leadPhone}"></td>
+                            <td th:text="${lead.leadCompanyName}"></td>
+                            <td>
+                                <span th:class="${lead.leadInterestLevel == 'HIGH' ? 'badge bg-success'
+                                    : (lead.leadInterestLevel == 'MEDIUM' ? 'badge bg-info'
+                                    : 'badge bg-warning')}"
+                                th:text="${lead.leadInterestLevel}">
+                                </span>
+                            </td>
+                            <td>
+                                <span th:class="${lead.leadState == 'PENDING' ? 'badge bg-warning'
+                                        : (lead.leadState == 'PROCESSED' ? 'badge bg-success'
+                                        : 'badge bg-danger')}"
+                                      th:text="${lead.leadState}">
+                                </span>
+                            </td>
+                            <td style="white-space:nowrap">
+                                <a class="btn btn-outline-warning btn-sm"
+                                   th:href="@{/leadEvent/edit(id=${lead.id})}">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>

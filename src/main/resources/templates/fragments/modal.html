@@ -1,0 +1,31 @@
+<!-- modal for information -->
+<div th:fragment="globalModal" class="modal fade" id="infoModal" data-bs-backdrop="static"
+     data-bs-keyboard="false" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="infoModalLabel">Information</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to perform this action ?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal">Close</button>
+                <button id="btnModalOK" type="button" class="btn btn-sm btn-success">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        //
+        function showModal() {
+            const myModal = new bootstrap.Modal(document.getElementById("infoModal"));
+            myModal.show();
+        }
+        function hideModal() {
+            const modalInstance = bootstrap.Modal.getInstance(document.getElementById("infoModal"));
+            modalInstance.hide();
+        }
+    </script>
+</div>

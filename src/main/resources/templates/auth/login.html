@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Event</title>
+    <link th:href="@{/css/bootstrap5.3.3.min.css}" rel="stylesheet" >
+    <link th:href="@{/css/style.css}" rel="stylesheet" >
+</head>
+<body class="bg-light d-flex justify-content-center align-items-center vh-100">
+
+    <div class="card bg-light p-4 shadow" style="width: 350px;">
+        <h3 class="text-center">Login</h3>
+
+        <!-- Display login errors -->
+        <div th:if="${param.error}" class="alert alert-danger" id="error">
+            Invalid email or password
+        </div>
+
+        <!-- Display logout message -->
+        <div th:if="${param.logout}" class="alert alert-success">
+            You have been logged out successfully.
+        </div>
+        <!-- Other message -->
+        <div class="alert" id="msg"></div>
+
+        <!-- th:action="@{/auth/login}"-->
+        <form id="loginForm" action="/auth/login" method="post" autocomplete="off" class="needs-validation" novalidate>
+            <div class="mb-3">
+                <label for="userEmail" class="form-label">Email</label>
+                <input type="email" id="userEmail" name="userEmail" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="userPassword" class="form-label">Password</label>
+                <input type="password" id="userPassword" name="userPassword" class="form-control" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100">Login</button>
+        </form>
+        <p class="text-center text-muted mt-3">Don't have an account? <a href="/auth/registration">Register</a></p>
+        <div class="mt-3 text-center">
+            <a href="#">Forgot password?</a>
+        </div>
+    </div>
+    <script type="text/javascript">
+        document.addEventListener("DOMContentLoaded", function() {
+            const form = document.getElementById("loginForm");
+            const email = document.getElementById("userEmail");
+            const password = document.getElementById("userPassword");
+            //
+            form.querySelectorAll("input").forEach(field => {
+                field.classList.remove("border-danger");
+            });
+
+            form.addEventListener("submit", function(event) {
+                if (!email.value || !password.value) {
+                    event.preventDefault();
+                    !email.value ? email.classList.add("border-danger") : "";
+                    !password.value ? password.classList.add("border-danger") : "";
+                }
+            });
+        });
+    </script>
+</body>
+</html>

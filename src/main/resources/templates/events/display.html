@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{fragments/head :: head}"> </head>
+<body>
+    <div  th:replace="~{fragments/topmenu :: topMenu}"></div>
+    <div class="wrapper mt-5 mb-5">
+        <div th:replace="~{fragments/leftmenu :: sidebar}"></div>
+        <div class="content" id="mainContent">
+            <!--    breadcrumb -->
+             <div th:replace="~{fragments/breadcrumb :: breadcrumb}"></div>
+
+            <!--  content -->
+            <div th:replace="~{fragments/modal :: globalModal}"></div>
+            <div th:replace="~{fragments/toast :: toast}"></div>
+            <div class="row mt-5">
+                <!-- Left Card -->
+                <div class="col-md-6 mb-2" th:object="${event}">
+                    <div class="card">
+                        <div class="card-header bg-secondary text-white"><strong>Event info</strong></div>
+                        <div class="card-body">
+                            <div class="row mb-3 align-items-center">
+                                <label class="col-sm-4 col-form-label">Name<span class="text-danger"><sup>*</sup></span></label>
+                                <div class="col-sm-8">
+                                    <span th:text="${event.eventTitle}" class="d-flex align-items-center"></span>
+                                </div>
+                            </div>
+                            <div class="row mb-3 align-items-center">
+                                <label class="col-sm-4 col-form-label">Type<span class="text-danger"><sup>*</sup></span></label>
+                                <div class="col-sm-8">
+                                    <span th:text="${event.eventType.eventType}" class="d-flex align-items-center"></span>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3 align-items-center">
+                                <label class="col-sm-4 col-form-label">Location</label>
+                                <div class="col-sm-8">
+                                    <span th:text="${event.eventLocation}" class="d-flex align-items-center"></span>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3 align-items-center">
+                                <label class="col-sm-4 col-form-label">Responsible<span class="text-danger"><sup>*</sup></span></label>
+                                <div class="col-sm-8">
+                                    <span th:text="${event.eventResponsible == null ? 'N/A' : event.eventResponsible.userFirstname + ' ' + event.eventResponsible.userLastname}" class="d-flex align-items-center"></span>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3 align-items-center">
+                                <label class="col-sm-4 col-form-label">Date Begin</label>
+                                <div class="col-sm-8">
+                                    <span th:text="${event.eventDateBegin} + ' at ' + ${event.eventTimeBegin}" class="d-flex align-items-center"></span>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3 align-items-center">
+                                <label class="col-sm-4 col-form-label">Date End</label>
+                                <div class="col-sm-8">
+                                    <span th:text="${event.eventDateEnd} + ' at ' + ${event.eventTimeBegin}" class="d-flex align-items-center"></span>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3 align-items-center">
+                                <label class="col-sm-4 col-form-label">Company<span class="text-danger"><sup>*</sup></span></label>
+                                <div class="col-sm-8">
+                                    <span th:text="${event.getCompany().companyName}" class="d-flex align-items-center"></span>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3 align-items-center">
+                                <label class="col-sm-4 col-form-label">Description</label>
+                                <div class="col-sm-8">
+                                    <span th:text="${event.eventDescription}" class="d-flex align-items-center"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Card -->
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header bg-secondary text-white"><strong>Company Attendee</strong></div>
+                        <div class="card-body">
+                            <!-- Company attendee -->
+                            <div class="row mb-2">
+                                <div class="col-md-12" th:if="${#lists.isEmpty(event.getCompanyAttendeeList())}">No data</div>
+                                <div class="col-md-12" th:unless="${#lists.isEmpty(event.getCompanyAttendeeList())}">
+                                    <table class="table table-light table-striped table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>First name</th>
+                                                <th>Last name</th>
+                                                <th>Email</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="table-group-divider">
+                                            <tr th:each="attendee, status : ${event.getCompanyAttendeeList()}">
+                                                <td th:text="${status.count}"></td>
+                                                <td th:text="${attendee.userFirstname}"></td>
+                                                <td th:text="${attendee.userLastname}"></td>
+                                                <td th:text="${attendee.getUserEmail()}"></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lead list-->
+            <div class="row mt-5">
+                <div class="col-md-12" >
+                    <div class="card">
+                        <div class="card-header bg-secondary text-white"><strong>Event Lead</strong></div>
+                        <div class="card-body">
+                            <!-- Company attendee -->
+                            <div class="row mb-2">
+                                <div class="col-md-12" th:if="${#lists.isEmpty(event.getLeadList())}">No data</div>
+                                <div class="col-md-12" th:unless="${#lists.isEmpty(event.getLeadList())}">
+                                    <table class="table table-light table-striped table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>First name</th>
+                                                <th>Last name</th>
+                                                <th>Email</th>
+                                                <th>Phone</th>
+                                                <th>Company</th>
+                                                <th>Interest Level</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="table-group-divider">
+                                            <tr th:each="lead, status : ${event.getLeadList()}">
+                                                <td th:text="${status.count}"></td>
+                                                <td th:text="${lead.leadFirstname}"></td>
+                                                <td th:text="${lead.leadLastname}"></td>
+                                                <td th:text="${lead.leadEmail}"></td>
+                                                <td th:text="${lead.leadPhone}"></td>
+                                                <td th:text="${lead.leadCompanyName}"></td>
+                                                <td>
+                                                    <span th:if='${lead.leadInterestLevel.equals("HIGH")}' class="badge bg-success" th:text="${lead.leadInterestLevel}"></span>
+                                                    <span th:if='${lead.leadInterestLevel.equals("MEDIUM")}' class="badge bg-info" th:text="${lead.leadInterestLevel}"></span>
+                                                    <span th:if='${lead.leadInterestLevel.equals("LOW")}' class="badge bg-warning" th:text="${lead.leadInterestLevel}"></span>
+                                                </td>
+                                                <td>
+                                                    <span th:if='${lead.leadState.equals("PROCESSED")}' class="badge bg-success" th:text="${lead.leadState}"></span>
+                                                    <span th:if='${lead.leadState.equals("PENDING")}' class="badge bg-warning" th:text="${lead.leadState}"></span>
+                                                    <span th:if='${lead.leadState.equals("IGNORE")}' class="badge bg-danger" th:text="${lead.leadState}"></span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Footer -->
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>

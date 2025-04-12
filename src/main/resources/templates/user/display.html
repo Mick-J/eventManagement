@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/head :: head}"> </head>
+<body>
+    <div  th:replace="~{fragments/topmenu :: topMenu}"></div>
+    <div class="wrapper mt-5 mb-5">
+        <div th:replace="~{fragments/leftmenu :: sidebar}"></div>
+        <div class="content" id="mainContent">
+            <!--    breadcrumb -->
+            <div th:replace="~{fragments/breadcrumb :: breadcrumb}"></div>
+
+            <!--  content -->
+            <div th:replace="~{fragments/modal :: globalModal}"></div>
+            <div th:replace="~{fragments/toast :: toast}"></div>
+            <div class="card text-bg-light mt-5 mb-3">
+                <div class="card-header"><strong>User profile</strong></div>
+                        <div class="card-body" th:object="${user}">
+                            <div class="row mb-3">
+                                <label class="col-sm-4 col-form-label">First Name</label>
+                                <div class="col-sm-8">
+                                    <span th:text="${user.userFirstname}"></span>
+                                </div>
+                            </div>
+
+                            <!-- Last Name -->
+                            <div class="row mb-3">
+                                <label class="col-sm-4 col-form-label">Last Name</label>
+                                <div class="col-sm-8">
+                                    <span th:text="${user.userLastname}"></span>
+                                </div>
+                            </div>
+
+                            <!-- Email -->
+                            <div class="row mb-3">
+                                <label class="col-sm-4 col-form-label">Email</label>
+                                <div class="col-sm-8">
+                                    <span th:text="${user.userEmail}"></span>
+                                </div>
+                            </div>
+
+                            <!-- Password -->
+                            <div class="row mb-3">
+                                <label class="col-sm-4 col-form-label">Password</label>
+                                <div class="col-sm-8">
+                                    <span th:text="${user.userPassword}"></span>
+                                </div>
+                            </div>
+                            <!-- Phone -->
+                            <div class="row mb-3">
+                                <label class="col-sm-4 col-form-label">Phone</label>
+                                <div class="col-sm-8">
+                                    <span th:text="${user.userPhone}"></span>
+                                </div>
+                            </div>
+                            <!-- create at -->
+                            <div class="row mb-3">
+                                <label class="col-sm-4 col-form-label">Date creation</label>
+                                <div class="col-sm-8">
+                                    <span th:text="${#temporals.format(user.createdAt, 'yyyy-MM-dd')}"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <!-- Footer -->
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+</body>
+</html>

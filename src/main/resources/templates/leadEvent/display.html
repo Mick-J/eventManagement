@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{fragments/head :: head}"></head>
+<body>
+    <div  th:replace="~{fragments/topmenu :: topMenu}"></div>
+    <div class="wrapper mt-5 mb-5">
+        <div th:replace="~{fragments/leftmenu :: sidebar}"></div>
+        <div class="content" id="mainContent">
+            <!--    breadcrumb -->
+            <div th:replace="~{fragments/breadcrumb :: breadcrumb}"></div>
+            <!--  content -->
+            <div th:replace="~{fragments/modal :: globalModal}"></div>
+            <div th:replace="~{fragments/toast :: toast}"></div>
+            <div class="row mt-5" th:object="${leadEvent}">
+                <div class="col-sm-6 mb-3 mb-sm-0">
+                    <div class="card text-bg-light mb-3">
+                        <div class="card-header"><strong>Lead Info</strong></div>
+                        <div class="card-body">
+                            <div class="row mb-3 align-items-center">
+                                <label class="col-sm-4 col-form-label">First Name<span class="text-danger"><sup>*</sup></span></label>
+                                <div class="col-sm-8">
+                                    <span th:text="${leadEvent.leadFirstname}" class="d-flex align-items-center"></span>
+                                </div>
+                            </div>
+                            <div class="row mb-3 align-items-center">
+                                <label class="col-sm-4 col-form-label">Last Name<span class="text-danger"><sup>*</sup></span></label>
+                                <div class="col-sm-8">
+                                    <span th:text="${leadEvent.leadLastname}" class="d-flex align-items-center"></span>
+                                </div>
+                            </div>
+                            <div class="row mb-3 align-items-center">
+                                <label class="col-sm-4 col-form-label">Email<span class="text-danger"><sup>*</sup></span></label>
+                                <div class="col-sm-8">
+                                    <span th:text="${leadEvent.leadEmail}" class="d-flex align-items-center"></span>
+                                </div>
+                            </div>
+                            <div class="row mb-3 align-items-center">
+                                <label class="col-sm-4 col-form-label">Phone</label>
+                                <div class="col-sm-8">
+                                    <span th:text="${leadEvent.leadPhone}" class="d-flex align-items-center"></span>
+                                </div>
+                            </div>
+                            <div class="row mb-3 align-items-center">
+                                <label class="col-sm-4 col-form-label">Lead State</label>
+                                <div class="col-sm-8">
+                                    <span th:if='${leadEvent.leadState.equals("PROCESSED")}' class="badge bg-success" th:text="${leadEvent.leadState}"></span>
+                                    <span th:if='${leadEvent.leadState.equals("PENDING")}' class="badge bg-warning" th:text="${leadEvent.leadState}"></span>
+                                    <span th:if='${leadEvent.leadState.equals("IGNORE")}' class="badge bg-danger" th:text="${leadEvent.leadState}"></span>
+                                </div>
+                            </div>
+                            <div class="row mb-3 align-items-center">
+                                <label class="col-sm-4 col-form-label">Created At</label>
+                                <div class="col-sm-8">
+                                    <span th:text="${#dates.format(leadEvent.createdAt, 'yyyy-MM-dd')}" class="d-flex align-items-center"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--        -->
+                <div class="col-sm-6">
+                    <div class="card text-bg-light mb-3">
+                        <div class="card-header"><strong>Business Info</strong></div>
+                        <div class="card-body">
+                            <div class="row mb-3 align-items-center">
+                                <label class="col-sm-4 col-form-label">Company Name</label>
+                                <div class="col-sm-8">
+                                    <span th:text="${leadEvent.leadCompanyName}" class="d-flex align-items-center"></span>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3 align-items-center">
+                                <label class="col-sm-4 col-form-label">Interest Level</label>
+                                <div class="col-sm-8">
+                                    <span th:if='${leadEvent.leadInterestLevel.equals("HIGH")}' class="badge bg-success" th:text="${leadEvent.leadInterestLevel}"></span>
+                                    <span th:if='${leadEvent.leadInterestLevel.equals("MEDIUM")}' class="badge bg-info" th:text="${leadEvent.leadInterestLevel}"></span>
+                                    <span th:if='${leadEvent.leadInterestLevel.equals("LOW")}' class="badge bg-warning" th:text="${leadEvent.leadInterestLevel}"></span>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3 align-items-center">
+                                <label class="col-sm-4 col-form-label">Comment</label>
+                                <div class="col-sm-8">
+                                    <span th:text="${leadEvent.comment}" class="d-flex align-items-center"></span>
+                                </div>
+                            </div>
+                            <div class="row mb-3 align-items-center">
+                                <label class="col-sm-4 col-form-label">Business Card</label>
+                                <div class="col-sm-8">
+                                    <a th:if="${not #strings.isEmpty(leadEvent.leadBCardImg)}"
+                                       th:href="@{/uploads/leadEvent/{filename}(filename=${leadEvent.leadBCardImg})}"
+                                       data-fancybox="gallery">
+                                        View Business Card
+                                    </a>
+                                    <span th:if="${#strings.isEmpty(leadEvent.leadBCardImg)}">No business card available</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+    <!-- Include jQuery and Fancybox JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('[data-fancybox="gallery"]').fancybox();
+        });
+    </script>
+    </body>
+</html>

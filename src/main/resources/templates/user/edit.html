@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{fragments/head :: head}"> </head>
+<body>
+    <div  th:replace="~{fragments/topmenu :: topMenu}"></div>
+    <div class="wrapper mt-5 mb-5">
+        <div th:replace="~{fragments/leftmenu :: sidebar}"></div>
+        <div class="content" id="mainContent">
+            <!--    breadcrumb -->
+            <div th:replace="~{fragments/breadcrumb :: breadcrumb}"></div>
+            <div th:replace="~{fragments/toast :: toast}"></div>
+            <!--  content -->
+            <!-- Form -->
+            <form id="eventForm" method="post" th:object="${userDTO}" class="needs-validation" novalidate>
+                <div class="card mb-3 mt-5">
+                    <div class="card-header"><strong>User profile</strong></div>
+                    <div class="card-body">
+
+                        <div class="row mb-3">
+                            <label class="col-sm-4 col-form-label">Email</label>
+                            <div class="col-sm-8">
+                                <span th:text="${userDTO.userEmail}"></span>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-sm-4 col-form-label">Name</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" th:field="${userDTO.userFirstname}">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-sm-4 col-form-label">Last Name</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" th:field="${userDTO.userLastname}">
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-sm-4 col-form-label">Password<span class="text-danger"><sup>*</sup></span></label>
+                            <div class="col-sm-8">
+                                <input type="password" id="userPassword" class="form-control" th:field="${userDTO.userPassword}" required>
+                                <small th:if="${passwordModelError}" class="text-danger">Both Passwords does not match</small>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-sm-4 col-form-label">Confirm password<span class="text-danger"><sup>*</sup></span></label>
+                            <div class="col-sm-8">
+                                <input type="password" id="checkPassword" class="form-control"  th:field="${userDTO.checkPassword}" required>
+                                <small id="passwordError"></small>
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <label class="col-sm-4 col-form-label">Phone</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" th:field="${userDTO.userPhone}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a class="btn btn-danger" th:href="@{/user/display}">Cancel</a>
+                        <button id="btnSubmitEvtform" class="btn btn-success me-md-2" type="submit"><span id="spanSave">Save</span></button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- Footer -->
+    <footer th:replace="~{fragments/footer :: footer}"></footer>
+
+    <script th:if="${editResult != null}">
+        showToast({
+            "messageType": "error",
+            "messageHeader": "Something went wrong",
+            "messageBody": "An error occurred when saving profile."
+        });
+    </script>
+    <script>
+        /*document.addEventListener("DOMContentLoaded", function () {
+            let form = document.getElementById("userForm");
+            if (form !== null) {
+                form.addEventListener("submit", async function (event) {
+
+                    let isValid = true;
+
+                    //
+                    form.querySelectorAll("input, select, textarea").forEach(field => {
+                        field.classList.remove("border-danger");
+                    });
+                    //
+                    form.querySelectorAll("input, select, textarea").forEach(field => {
+                        if (!field.checkValidity()) {
+                            field.classList.add("border-danger");
+                            isValid = false;
+                        }
+                    });
+                    if (isValid !== false) {
+                        return;
+                    }
+                    event.preventDefault();
+                });
+            }
+        });*/
+    </script>
+</body>
+</html>
