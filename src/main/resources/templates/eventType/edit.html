@@ -18,7 +18,7 @@
                         <div class="row mb-3">
                             <label class="col-sm-4 col-form-label"></label>
                             <div class="col-sm-8">
-                                <input type="hidden" name="id" th:value="${eventType.getId()}">
+                                <input type="hidden" name="id" th:value="${eventTypeDTO.id()}">
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -31,7 +31,7 @@
                 </div>
                 <div class="row">
                     <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                        <a class="btn btn-danger" th:href="@{/eventType/display(id=${eventType.getId()})}">Cancel</a>
+                        <a class="btn btn-danger" th:href="@{/eventType/display(id=${eventTypeDTO.id()})}">Cancel</a>
                         <button id="btnSubmitEvtform" class="btn btn-success me-md-2" type="submit"><span id="spanSave">Save</span></button>
                     </div>
                 </div>

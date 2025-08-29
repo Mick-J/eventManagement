@@ -108,7 +108,7 @@ function topMenuDisplay() {
         return;
     }
     document.getElementById("topmenuList").setAttribute("href", `/${baseUrl}`);
-    document.getElementById("topmenuAdd").setAttribute("href", `/${baseUrl}/add`);
+    // document.getElementById("topmenuAdd").setAttribute("href", `/${baseUrl}/add`);
 
     //
     let currentPathParts = currentUrl.split('/');
@@ -154,6 +154,60 @@ function topMenuDisplay() {
 
 }
 
+// click add (top menu button)
+document.addEventListener("DOMContentLoaded", function () {
+    let btnAdd = document.getElementById("topmenuAdd");
+    btnAdd.addEventListener("click", function (e) {
+        e.preventDefault();
+
+        let actualUrl = window.location.pathname;
+        let partQueries = window.location.search
+        let baseRoute = actualUrl.split('/')[1];
+        const urlParamList = new URLSearchParams(partQueries);
+
+        //
+        fetch(`/${baseRoute}/add`, {
+            method: "POST",
+            headers: {
+                'Accept': 'application/json'
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.messageType) {
+                    let toastMessage = {
+                        "messageType": data.messageType,
+                        "messageHeader": data.messageHeader,
+                        "messageBody": data.messageBody
+                    };
+                    if (data.messageType === "success"
+                        && typeof data.detailList === "object"
+                        && Object.keys(data.detailList).length > 0
+                        && data.detailList.id) {
+                        sessionStorage.setItem("toastMessage", JSON.stringify(toastMessage));
+                        window.location.href = `/${baseRoute}/edit?id=`+data.detailList.id;
+                    } else {
+                        showToast(toastMessage);
+                    }
+                } else {
+                    showToast({
+                        "messageType": "error",
+                        "messageHeader": "Something went wrong",
+                        "messageBody": "An error occurred when adding new " + baseRoute
+                    });
+                }
+            })
+            .catch(error => {
+                showToast({
+                    "messageType": "error",
+                    "messageHeader": "Something went wrong",
+                    "messageBody": "Unable to add new " + baseRoute
+                });
+                console.log(error)
+            });
+
+    });
+});
 /** ---------------------------------------------------------------------------------------------
  *  table row clickable
  --------------------------------------------------------------------------------------------- */
@@ -198,9 +252,12 @@ document.addEventListener("DOMContentLoaded", function () {
             const currentId = urlParamList.get("id");
 
             fetch(`/${baseRoute}/delete?id=${currentId}`, {
-                method: "DELETE"
+                method: "DELETE",
+                headers: {
+                    'Accept': 'application/json'
+                }
             })
-                .then(response => response.json()) // Expect JSON response
+                .then(response => response.json())
                 .then(data => {
                     if (data.messageType) {
                         let toastMessage = {
@@ -291,6 +348,7 @@ function displaySessionstorageToast() {
         try {
             let message = JSON.parse(storedMessage);
             showToast(message);
+            console.dir(message);
             sessionStorage.removeItem("toastMessage");
         } catch (error) {
             console.error("Invalid JSON:", error.message);
@@ -329,6 +387,15 @@ document.addEventListener("DOMContentLoaded", function () {
                     isValid = false;
                 }
             });
+            //
+            if (!isValid) {
+                var toastMessage = {
+                    "messageType": "error",
+                    "messageHeader": "Validation Failed",
+                    "messageBody": "Please correct the highlighted errors."
+                };
+                showToast(toastMessage);
+            }
 
             // Form is valid, proceed to submit
             if (isValid) {
@@ -348,7 +415,10 @@ document.addEventListener("DOMContentLoaded", function () {
                 try {
                     const response = await fetch(`/${baseRoute}/edit`, {
                         method: "POST",
-                        body: formData
+                        body: formData,
+                        headers: {
+                            'Accept': 'application/json'
+                        }
                     });
                     //
                     const data = await response.json();
@@ -360,6 +430,7 @@ document.addEventListener("DOMContentLoaded", function () {
                             "messageHeader": data.messageHeader,
                             "messageBody": data.messageBody
                         };
+
                         if (data.messageType === "success") {
                             if (baseRoute === "user") {
                                 window.location.href = `/auth/login?logout`;
@@ -368,7 +439,9 @@ document.addEventListener("DOMContentLoaded", function () {
                                 window.location.href =  `/${baseRoute}/display?id=${currentId}`;
                             }
                         } else if (data.messageType === "error") {
-                            if (data.detailList && typeof data.detailList === "object") {
+                            if (data.detailList
+                                && typeof data.detailList === "object"
+                                && Object.keys(data.detailList).length > 0) {
                                 // Loop through each key-value pair
                                 let addMessage = "<ul>";
                                 for (const [fieldName, errorMessage] of Object.entries(data.detailList)) {

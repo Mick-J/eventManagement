@@ -1,12 +1,12 @@
 services:
   mariadb:
     image: mariadb:10.11
-    container_name: event-management
+    container_name: event-management-mariadb
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: rootPassword
-      MYSQL_USER: user
-      MYSQL_PASSWORD: userPassword
+      MYSQL_ROOT_PASSWORD: EGVdS2WosyOwkDz
+      MYSQL_USER: michelle
+      MYSQL_PASSWORD: HN9gGhk3fCSyyKN
       MYSQL_DATABASE: event_db
     ports:
       - "3306:3306"

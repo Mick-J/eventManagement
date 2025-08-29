@@ -1,6 +1,9 @@
 # Company event management
 This project is about company events management.
-To test it, you can either register first or take the user login parameters inside requests.http file.
+To test it,
+1. docker compose up -d
+2. access at localhost:8080
+You can either register first or take the user login parameters inside requests.http file.
 
 ### Top menu
 <img width="327" alt="top_menu" src="https://github.com/user-attachments/assets/b0fbd939-6a3c-4f3e-8f48-1d6d9e7ffec9" />
@@ -26,10 +29,6 @@ To test it, you can either register first or take the user login parameters insi
 - Spring DATA JPA
 - MariaDB
 
-
-
-
 ### Further improvement
 - list items pagination and columns sorting
-- Add remaining units tests
-- Improve password strength check
+- Add remaining integration and units tests

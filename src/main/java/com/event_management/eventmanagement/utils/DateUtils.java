@@ -7,15 +7,22 @@ import java.util.Optional;
 
 public class DateUtils {
     // Check if date is valid (non-empty and correctly formatted)
-    public static boolean isDateValid(String dateStr) {
-        return parseDate(dateStr, "yyyy-MM-dd").isPresent();
+    public static boolean isDateValid(String dateStr, String patternStr) {
+        String pattern = patternStr.isEmpty() ? "yyyy-MM-dd" : patternStr;
+        return parseDate(dateStr, pattern).isPresent();
     }
 
     // Check if dateBegin is before dateEnd
     public static boolean isDateBeginBeforeEnd(String dateBeginStr, String dateEndStr, String patternStr) {
+        if(!isDateValid(dateBeginStr, patternStr)) {
+            return false;
+        }
+        if(!isDateValid(dateEndStr, patternStr)) {
+            return false;
+        }
         return parseDate(dateBeginStr, patternStr)
                 .flatMap(begin -> parseDate(dateEndStr, patternStr)
-                        .map(end -> begin.isBefore(end)))
+                        .map(begin::isBefore))
                 .orElse(false);
     }
 
@@ -23,7 +30,7 @@ public class DateUtils {
     public static boolean isDatesEqual(String dateBeginStr, String dateEndStr, String patternStr) {
         return parseDate(dateBeginStr, patternStr)
                 .flatMap(begin -> parseDate(dateEndStr, patternStr)
-                        .map(end ->begin.isEqual(end)))
+                        .map(begin::isEqual))
                 .orElse(false);
     }
 

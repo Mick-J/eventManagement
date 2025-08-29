@@ -15,10 +15,10 @@
             <!--  content -->
             <div class="error-container">
                 <h1>Oops! Something went wrong.</h1>
-                <p>
-                    <span th:text="'Error: ' + ${status}" class="badge bg-danger"></span> |
-                    <span th:text="${error}" class="badge bg-warning"></span> |
-                    <span th:text="${message}" class="badge bg-info"></span>
+                <p th:if="${message}">
+                    <span th:text="'Error: ' + ${message.getMessageHeader()}" class="badge bg-danger"></span> |
+                    <span th:text="${message.messageType}" class="badge bg-warning"></span> |
+                    <span th:text="${message.getMessageBody()}" class="badge bg-info"></span>
                 </p>
                 <a href="/" class="btn btn-sm btn-primary">Back Home</a>
                 <img th:src="@{/images/error.png}" alt="404 Not Found" >

@@ -45,4 +45,13 @@
     <!-- Footer -->
     <footer th:replace="~{fragments/footer :: footer}" ></footer>
 </body>
+    <!-- Message toast after unsuccess add new company -->
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        let flashMessage = /*[[${message}]]*/ null;
+        if (flashMessage !== null) {
+            showToast(flashMessage);
+        }
+        /*]]>*/
+    </script>
 </html>

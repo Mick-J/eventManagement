@@ -6,6 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface LeadEventRepository extends JpaRepository<LeadEvent, Integer> {
-    // Get the latest LeadEvent by ID
     LeadEvent findTopByOrderByIdDesc();
 }

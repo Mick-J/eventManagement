@@ -2,6 +2,8 @@ package com.event_management.eventmanagement.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -12,6 +14,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableWebSecurity
+@Profile("!test")
 public class SecurityConfig {
     private static final String[] WHITE_LIST_URL = {"/auth/**", "/css/**", "/js/**", "/images/**"};
 
@@ -43,7 +46,6 @@ public class SecurityConfig {
                         .maximumSessions(1)
                         .maxSessionsPreventsLogin(false)
                 );
-
         return http.build();
     }
 
@@ -52,20 +54,9 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    // For testing purpose
-   /*@Bean
-    public UserDetailsService userDetailsService() {
-        return new InMemoryUserDetailsManager(
-                User.withUsername("userf1c34baf@techchina.com")
-                        .password("{noop}password")
-                        .roles("USER")
-                        .build()
-        );
-    }*/
-
-
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
+
 }

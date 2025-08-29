@@ -8,5 +8,10 @@ import java.util.Optional;
 
 @Repository
 public interface CountryRepository extends JpaRepository<Country, Integer> {
+
     Optional<Country> findFirstBy();
+
+    Country findTopByOrderByIdDesc();
+
+    Optional<Country> findCountriesByCountryName(String countryName);
 }

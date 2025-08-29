@@ -1,13 +1,14 @@
 package com.event_management.eventmanagement.controller;
 
+import com.event_management.eventmanagement.DTO.CompanyDTO;
+import com.event_management.eventmanagement.controllerAdvice.ResourceNotFoundException;
+import com.event_management.eventmanagement.controllerAdvice.GlobalExceptionHandler;
 import com.event_management.eventmanagement.model.Company;
 import com.event_management.eventmanagement.model.Country;
 import com.event_management.eventmanagement.repository.CompanyRepository;
 import com.event_management.eventmanagement.repository.CountryRepository;
-import com.event_management.eventmanagement.repository.EventRepository;
-import com.event_management.eventmanagement.repository.UserCompanyRepository;
 import com.event_management.eventmanagement.service.CompanyService;
-import com.event_management.eventmanagement.service.CountyService;
+import com.event_management.eventmanagement.service.CountryService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,7 +28,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-
 @ExtendWith(MockitoExtension.class)
 class CompanyControllerTest {
 
@@ -35,14 +35,18 @@ class CompanyControllerTest {
 
     @Mock private CompanyRepository companyRepo;
     @Mock private CountryRepository countryRepo;
-    @Mock private CountyService countyService;
+    @Mock private CountryService countyService;
+    @Mock private CompanyService companyService;
 
     @InjectMocks
     private CompanyController companyController;
 
     @BeforeEach
     void setUp() {
-        mockMvc = MockMvcBuilders.standaloneSetup(companyController).build();
+        mockMvc = MockMvcBuilders
+                .standaloneSetup(companyController)
+                .setControllerAdvice(new GlobalExceptionHandler())
+                .build();
     }
 
     @Test
@@ -55,7 +59,17 @@ class CompanyControllerTest {
         mockCompany.setContactEmail("test@techgermany.com");
         mockCompany.setCountry(new Country(1, "Germany"));
         //
-        when(companyRepo.findById(1)).thenReturn(Optional.of(mockCompany));
+        when(companyService.getCompanyDTOById(1)).thenReturn(Optional.of(
+                new CompanyDTO(
+                        1,
+                        "Test Company name",
+                        "https://techgermany.com",
+                        "test@techgermany.com",
+                        "123456789",
+                        "987654321",
+                        1
+                )
+        ));
         when(countyService.getCountryList()).thenReturn(List.of(new Country(1, "Germany")));
         //
         mockMvc.perform(get("/company/edit").param("id", "1"))
@@ -69,11 +83,11 @@ class CompanyControllerTest {
     @DisplayName("test Edit Company >>GetRequest >>Company Not Found")
     void testEditCompany_GetRequest_CompanyNotFound() throws Exception {
         //
-        when(companyRepo.findById(999)).thenReturn(Optional.empty());
+        when(companyService.getCompanyDTOById(999)).thenReturn(Optional.empty());
         //
         mockMvc.perform(get("/company/edit").param("id", "999"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("company/index"));
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/company"));
     }
 
 
@@ -91,10 +105,7 @@ class CompanyControllerTest {
         Country country = new Country();
         country.setId(countryId);
 
-        when(companyRepo.findById(companyId)).thenReturn(Optional.of(existingCompany));
-        when(countryRepo.findById(countryId)).thenReturn(Optional.of(country));
-        when(companyRepo.findByContactEmail("new@tech.com")).thenReturn(Optional.empty());
-        when(companyRepo.save(any(Company.class))).thenReturn(existingCompany);
+        doNothing().when(companyService).updateCompany(eq(companyId), any(CompanyDTO.class));
 
         //
         mockMvc.perform(post("/company/edit")
@@ -108,10 +119,7 @@ class CompanyControllerTest {
                 )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.messageType").value("success"))
-                .andExpect(jsonPath("$.messageBody").value("Company updated successfully!"));
-
-        // Verify saved entity
-        verify(companyRepo).save(any(Company.class));
+                .andExpect(jsonPath("$.messageBody").value("Company updated successfully"));
     }
 
     @Test
@@ -125,8 +133,9 @@ class CompanyControllerTest {
         company.setContactEmail("company@tech.com");
 
         //
-        when(companyRepo.findById(companyId)).thenReturn(Optional.of(company));
-        when(countryRepo.findById(invalidCountryId)).thenReturn(Optional.empty());
+        doAnswer(invocation -> {
+            throw new ResourceNotFoundException("Country not found with ID " + invalidCountryId, "Country not found");
+        }).when(companyService).updateCompany(eq(companyId), any(CompanyDTO.class));
         //
         mockMvc.perform(post("/company/edit")
                         .param("id", String.valueOf(companyId))
@@ -137,9 +146,9 @@ class CompanyControllerTest {
                         .param("contactEmail", "new@tech.com")
                         .param("countryId", String.valueOf(invalidCountryId))
                 )
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.messageType").value("error"))
-                .andExpect(jsonPath("$.messageBody").value("Company not updated"));
+                .andExpect(jsonPath("$.messageBody").value("Country not found"));
     }
 
     @Test
@@ -159,9 +168,12 @@ class CompanyControllerTest {
         Country country = new Country();
         country.setId(countryId);
         //
-        when(companyRepo.findById(companyId)).thenReturn(Optional.of(currentCompany));
-        when(countryRepo.findById(countryId)).thenReturn(Optional.of(country));
-        when(companyRepo.findByContactEmail("duplicate@tech.com")).thenReturn(Optional.of(otherCompany));
+        doAnswer(invocation -> {
+            throw new com.event_management.eventmanagement.controllerAdvice.DuplicateResourceException(
+                    "Email duplicate",
+                    "Email is already used by another company."
+            );
+        }).when(companyService).updateCompany(eq(companyId), any(CompanyDTO.class));
 
         mockMvc.perform(post("/company/edit")
                         .param("id", String.valueOf(companyId))
@@ -172,10 +184,9 @@ class CompanyControllerTest {
                         .param("contactEmail", "duplicate@tech.com")
                         .param("countryId", String.valueOf(countryId))
                 )
-                .andExpect(status().isBadRequest())
+                .andExpect(status().isConflict())
                 .andExpect(jsonPath("$.messageType").value("error"))
-                .andExpect(jsonPath("$.messageBody").value("Company not updated"))
-                .andExpect(jsonPath("$.detailList.contactEmail").value("Email Already used by another company"));
+                .andExpect(jsonPath("$.messageBody").value("Email is already used by another company."));
     }
 
 
@@ -192,9 +203,7 @@ class CompanyControllerTest {
         Country country = new Country();
         country.setId(countryId);
         //
-        when(companyRepo.findById(companyId)).thenReturn(Optional.of(company));
-        when(countryRepo.findById(countryId)).thenReturn(Optional.of(country));
-        when(companyRepo.findByContactEmail("new@tech.com")).thenReturn(Optional.empty());
+        // No service stub; validation will fail before service is called
 
         //
         mockMvc.perform(post("/company/edit")
@@ -206,10 +215,7 @@ class CompanyControllerTest {
                         .param("contactEmail", "new@tech.com")
                         .param("countryId", String.valueOf(countryId))
                 )
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.messageType").value("error"))
-                .andExpect(jsonPath("$.messageBody").value("Company not updated"))
-                .andExpect(jsonPath("$.detailList.companyName").exists());
+                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -225,10 +231,7 @@ class CompanyControllerTest {
         Country country = new Country();
         country.setId(countryId);
         //
-        when(companyRepo.findById(companyId)).thenReturn(Optional.of(company));
-        when(countryRepo.findById(countryId)).thenReturn(Optional.of(country));
-        when(companyRepo.findByContactEmail("test@techgermany.com")).thenReturn(Optional.of(company));
-        when(companyRepo.save(any())).thenThrow(new DataAccessException("DB Error") {});
+        doThrow(new DataAccessException("DB Error") {}).when(companyService).updateCompany(eq(companyId), any(CompanyDTO.class));
 
         //
         mockMvc.perform(post("/company/edit")
@@ -242,6 +245,6 @@ class CompanyControllerTest {
                 )
                 .andExpect(status().isInternalServerError())
                 .andExpect(jsonPath("$.messageType").value("error"))
-                .andExpect(jsonPath("$.messageBody").value("Company not updated"));
+                .andExpect(jsonPath("$.messageBody").value("An error occurred while processing your request. Please contact the admin"));
     }
 }

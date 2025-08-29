@@ -11,9 +11,9 @@ public class SanitizationUtils {
 
     /**
      *
-     * @param object
+     * @param object : Instance Entity to be sanitized
      * @param type : value escape|unescape
-     * @param <T>
+     * @param <T> : Class
      */
     public static <T> void sanitizeObjectFields(T object, String type) {
         if (object == null) return;
@@ -28,7 +28,7 @@ public class SanitizationUtils {
                     if (originalValue != null) {
                         String sanitizedValue;
                         originalValue = originalValue.strip();
-                        if (type.equals("escape")) {
+                        if (type.equalsIgnoreCase("escape")) {
                             sanitizedValue = StringEscapeUtils.escapeHtml4(originalValue);
                         } else {
                             sanitizedValue = StringEscapeUtils.unescapeHtml4(originalValue);
@@ -38,7 +38,7 @@ public class SanitizationUtils {
                 }
             } catch (IllegalAccessException e) {
                 logger.info( "Sanitization {} error when {}", object.getClass().toString(), type);
-                e.printStackTrace();
+                 // e.printStackTrace();
             }
         }
     }

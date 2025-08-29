@@ -1,0 +1,40 @@
+services:
+  mariadb:
+    image: mariadb:10.11
+    container_name: event-management-mariadb
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: EGVdS2WosyOwkDz
+      MYSQL_USER: michelle
+      MYSQL_PASSWORD: HN9gGhk3fCSyyKN
+      MYSQL_DATABASE: event_db
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./db:/docker-entrypoint-initdb.d
+      - event_db_data:/var/lib/mysql
+    networks:
+      event-net:
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile2
+    image: event-management-app
+    container_name: event-management-app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mariadb
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mariadb://mariadb:3306/event_db?useSSL=false&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: michelle
+      SPRING_DATASOURCE_PASSWORD: HN9gGhk3fCSyyKN
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    networks:
+      event-net:
+
+volumes:
+  event_db_data:
+networks:
+  event-net:
