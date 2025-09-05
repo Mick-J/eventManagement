@@ -1,12 +1,11 @@
-package com.event_management.eventmanagement.controller;
+package com.event_management.eventmanagement;
 
 import com.event_management.eventmanagement.DTO.CompanyDTO;
+import com.event_management.eventmanagement.controller.CompanyController;
 import com.event_management.eventmanagement.controllerAdvice.ResourceNotFoundException;
 import com.event_management.eventmanagement.controllerAdvice.GlobalExceptionHandler;
 import com.event_management.eventmanagement.model.Company;
 import com.event_management.eventmanagement.model.Country;
-import com.event_management.eventmanagement.repository.CompanyRepository;
-import com.event_management.eventmanagement.repository.CountryRepository;
 import com.event_management.eventmanagement.service.CompanyService;
 import com.event_management.eventmanagement.service.CountryService;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,9 +32,9 @@ class CompanyControllerTest {
 
     private MockMvc mockMvc;
 
-    @Mock private CompanyRepository companyRepo;
-    @Mock private CountryRepository countryRepo;
-    @Mock private CountryService countyService;
+//    @Mock private CompanyRepository companyRepo;
+//    @Mock private CountryRepository countryRepo;
+    @Mock private CountryService countryService;
     @Mock private CompanyService companyService;
 
     @InjectMocks
@@ -70,7 +69,7 @@ class CompanyControllerTest {
                         1
                 )
         ));
-        when(countyService.getCountryList()).thenReturn(List.of(new Country(1, "Germany")));
+        when(countryService.getCountryList()).thenReturn(List.of(new Country(1, "Germany")));
         //
         mockMvc.perform(get("/company/edit").param("id", "1"))
                 .andExpect(status().isOk())
